@@ -4,8 +4,8 @@ import * as d3 from "d3";
 import { useState, useMemo, useEffect } from "react";
 import * as ReactDOMServer from "react-dom/server";
 import { country_data } from "../utils/data/coutries.js";
-import Card from "@mui/material/Card";
-
+import AppBar from "@mui/material/AppBar";
+import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -85,7 +85,21 @@ function MusicGlobe() {
   const drawer_contents = (
     <React.Fragment>
       {clickD ? (
-        <Drawer anchor="left" open={drawer} onClose={toggleDrawer}>
+        <Drawer
+          //   variant="permanent"
+          sx={{
+            // width: drawerWidth,
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              //   width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+          anchor="left"
+          open={drawer}
+          onClose={toggleDrawer}
+        >
+          <Toolbar />
           {songsData ? (
             <>
               <Typography variant="h5" className="text-center">
@@ -136,9 +150,16 @@ function MusicGlobe() {
   );
   return (
     <>
-      <Card className="absolute top-12 right-0 w-[400px] " variant="outlined">
-        {/* {card} */}
-      </Card>
+      <AppBar
+        position="fixed"
+        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+      >
+        <Toolbar>
+          <Typography variant="h6" noWrap component="div">
+            Music World
+          </Typography>
+        </Toolbar>
+      </AppBar>
       {drawer_contents}
       <Globe
         className="z-0 absolute left-0"
