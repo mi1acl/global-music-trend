@@ -1,10 +1,9 @@
 import Globe from "react-globe.gl";
 import React from "react";
 import * as d3 from "d3";
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import * as ReactDOMServer from "react-dom/server";
 import { country_data } from "../utils/data/coutries.js";
-import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
@@ -28,10 +27,19 @@ function MusicGlobe() {
   const [clickD, setClickD] = useState();
   const [songsData, setSongsData] = useState();
   const [drawer, setDrawer] = useState(true);
+  const globeEl = useRef();
 
   useEffect(() => {
     // load data
     setCountries(country_data);
+  }, []);
+
+  useEffect(() => {
+    // Auto-rotate
+    globeEl.current.controls().autoRotate = true;
+    globeEl.current.controls().autoRotateSpeed = -0.1;
+
+    globeEl.current.pointOfView({ lat: 150, lng: 90 }, 1000);
   }, []);
 
   const colorScale = d3.scaleSequentialSqrt(d3.interpolateYlOrRd);
@@ -150,21 +158,14 @@ function MusicGlobe() {
   );
   return (
     <>
-      <AppBar
-        position="fixed"
-        sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
-      >
-        <Toolbar>
-          <Typography variant="h6" noWrap component="div">
-            Music World
-          </Typography>
-        </Toolbar>
-      </AppBar>
       {drawer_contents}
       <Globe
+        ref={globeEl}
         className="z-0 absolute left-0"
         globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
         backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+        showAtmosphere={true}
+        atmosphereAltitude="0.20"
         lineHoverPrecision={0}
         polygonsData={countries.features.filter(
           // exclude antartica
