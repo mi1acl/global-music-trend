@@ -15,26 +15,15 @@ type DrawerProps = {
         name: string;
         listeners: string;
     }];
-    drawer: boolean;
-
-
+    open: boolean;
+    toggleDrawer: ()=>void;
     setDrawer: (newState:boolean)=>void;
 }
 
 function TrendDrawer(props: DrawerProps) {
 
-  const toggleDrawer = (event: { type: string; key: string; }) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
-
-    props.setDrawer(false);
-  };
     return ( 
-        <React.Fragment>
+    <React.Fragment>
           <Drawer
               variant="temporary"
             sx={{
@@ -46,8 +35,8 @@ function TrendDrawer(props: DrawerProps) {
               },
             }}
             anchor="left"
-            open={props.drawer}
-            onClose={toggleDrawer}
+            open={props.open}
+            onClose={props.toggleDrawer}
           >
             <Toolbar />
             {props.songsData ? (
@@ -92,7 +81,7 @@ function TrendDrawer(props: DrawerProps) {
             )}
           </Drawer>
 
-      </React.Fragment>
+    </React.Fragment>
      );
 }
 

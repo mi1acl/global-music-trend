@@ -72,13 +72,22 @@ function MusicGlobe() {
   // ===================
   // music card contents
   // ===================
+  const toggleDrawer = (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+    setDrawer(false);
+  };
 
   const drawer_contents = clickD ? (
     <TrendDrawer
-      title={clickD.properties.ADMIN}
-      drawer={drawer}
-      setDrawer={setDrawer}
       songsData={songsData}
+      title={clickD.properties.ADMIN}
+      open={drawer}
+      toggleDrawer={toggleDrawer}
     />
   ) : (
     <Typography variant="h5">
