@@ -4,15 +4,8 @@ import * as d3 from "d3";
 import { useState, useMemo, useEffect, useRef } from "react";
 import * as ReactDOMServer from "react-dom/server";
 import { country_data } from "../utils/data/coutries.js";
-import Toolbar from "@mui/material/Toolbar";
+import TrendDrawer from "./TrendDrawer";
 import Typography from "@mui/material/Typography";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
-import Drawer from "@mui/material/Drawer";
 
 function PolygonLabel({ properties: d }) {
   let lbl = (
@@ -79,82 +72,18 @@ function MusicGlobe() {
   // ===================
   // music card contents
   // ===================
-  const toggleDrawer = (event) => {
-    if (
-      event.type === "keydown" &&
-      (event.key === "Tab" || event.key === "Shift")
-    ) {
-      return;
-    }
 
-    setDrawer(false);
-  };
-
-  const drawer_contents = (
-    <React.Fragment>
-      {clickD ? (
-        <Drawer
-          //   variant="permanent"
-          sx={{
-            // width: drawerWidth,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: {
-              //   width: drawerWidth,
-              boxSizing: "border-box",
-            },
-          }}
-          anchor="left"
-          open={drawer}
-          onClose={toggleDrawer}
-        >
-          <Toolbar />
-          {songsData ? (
-            <>
-              <Typography variant="h5" className="text-center">
-                {clickD.properties.ADMIN}
-                {/* {"'s Top Songs"} */}
-              </Typography>
-              <List
-                dense
-                sx={{
-                  width: "100%",
-                  maxWidth: 360,
-                  bgcolor: "background.paper",
-                }}
-              >
-                {songsData.map((song) => {
-                  const labelId = `checkbox-list-secondary-label-${song}`;
-                  return (
-                    <ListItem key={song.name} disablePadding>
-                      <ListItemButton>
-                        <ListItemAvatar>
-                          <Avatar
-                            alt={`Avatar n°${song + 1}`}
-                            src={`${song.image[1]["#text"]}`}
-                          />
-                        </ListItemAvatar>
-                        <ListItemText
-                          id={labelId}
-                          primary={`${song.name} | ${song.listeners}`}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  );
-                })}
-              </List>
-            </>
-          ) : (
-            <Typography variant="h5">
-              {"Could not find the songs' information for this country"}
-            </Typography>
-          )}
-        </Drawer>
-      ) : (
-        <Typography variant="h5">
-          {"I will show trending music in every country, just select one!"}
-        </Typography>
-      )}
-    </React.Fragment>
+  const drawer_contents = clickD ? (
+    <TrendDrawer
+      title={clickD.properties.ADMIN}
+      drawer={drawer}
+      setDrawer={setDrawer}
+      songsData={songsData}
+    />
+  ) : (
+    <Typography variant="h5">
+      {"I will show trending music in every country, just select one!"}
+    </Typography>
   );
   return (
     <>
