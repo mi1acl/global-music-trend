@@ -10,6 +10,7 @@
 var request = require("request"); // "Request" library
 const express = require("express");
 const router = express.Router();
+require("dotenv").config();
 
 var client_id = "CLIENT_ID"; // Your client id
 var client_secret = "CLIENT_SECRET"; // Your secret

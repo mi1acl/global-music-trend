@@ -1,0 +1,34 @@
+{
+    "compilerOptions": {
+        "outDir": "./app/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "noUnusedParameters": true,
+        "noUnusedLocals": true,
+        "strict": true,
+        "strictNullChecks": true,
+        "experimentalDecorators": true,
+        "skipLibCheck": true,
+        "module": "commonJS",
+        "target": "es6",
+        "jsx": "react",
+        "resolveJsonModule": true,
+        // my configs
+        "noEmit": true,
+        "allowSyntheticDefaultImports": true,
+        // "allowJs": true,
+        // "checkJs": true,
+    },
+    "compileOnSave": false,
+    "include": [
+        "routes/**/*"
+    ],
+    "exclude": [
+        "node_modules"
+    ],
+    "filesGlob": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "!node_modules/**"
+    ]
+}
