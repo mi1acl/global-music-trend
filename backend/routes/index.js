@@ -1,9 +1,4 @@
 // const blazemeter = require("./blazemeter");
-// const appdynamics = require("./appdynamics");
-// // const query = require("./query_engine");
-// const metrics = require("./metrics");
-// const timescale = require("./timescale-query");
-// const validate = require("./validate");
 
 // module.exports.routes = [
 //   blazemeter, //
