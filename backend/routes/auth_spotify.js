@@ -73,17 +73,34 @@ spotifyApi.clientCredentialsGrant().then(
 //     // });
 //     // console.log(res);
 // }
-async function run() {
+async function new_releases(limit = 5, offset = 0, country) {
+    let new_releases = await spotifyApi
+        .getNewReleases({ limit: 5, offset: 0, country: country })
+        .then(
+            function (data) {
+                console.log(data.body);
+                return data.body;
+            },
+            function (err) {
+                console.log("Something went wrong!", err);
+            }
+        );
+    console.log(new_releases);
+    return new_releases;
+}
+async function run(req, res) {
     // let token = await get_token(client_id, client_secret);
     // let access_token = token.access_token;
     // Get an access token and 'save' it using a setter
 
     const token = spotifyApi.getAccessToken();
     console.log("token:\n", token);
+
     // console.log(await get_user(access_token, "jmperezperez"));
+    res.send(new_releases("USA"));
 }
 
-router.get("", run);
+router.get("", (req, res) => run(req, res));
 
 module.exports = {
     path: "/auth", // The main entrance to this route aka /
