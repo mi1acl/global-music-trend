@@ -9,9 +9,11 @@
 
 const express = require("express");
 const router = express.Router();
+const fetch = require("node-fetch");
 require("dotenv").config();
 
-async function country_trends(limit = 10, country) {
+async function country_trends(country, limit = 10) {
+    console.log("hey\n", country);
     let aKey = process.env.LASTFM_API_KEY;
     let url = `http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=${country}&api_key=${aKey}&format=json&limit=${limit}`;
 
@@ -26,8 +28,12 @@ async function country_trends(limit = 10, country) {
 }
 async function run(req, res) {
     // console.log(await get_user(access_token, "jmperezperez"));
-    country = req.params["country"];
-    res.send(country_trends("USA"));
+    country = req.query["country"];
+    if (country) {
+        res.send(country_trends(country));
+    } else {
+        res.status(400).send("Country parameter is required.");
+    }
 }
 
 router.get("", (req, res) => run(req, res));
