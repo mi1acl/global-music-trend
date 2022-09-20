@@ -44,25 +44,33 @@ function MusicGlobe() {
     colorScale.domain([0, maxVal]);
 
     // what happens when a country is clicked
-    function handleClick(d) {
+    async function handleClick(d) {
         setClickD(d);
         setDrawer(true);
-        let aKey = process.env.REACT_APP_LASTFM_API_KEY;
-        let url = `http://ws.audioscrobbler.com/2.0/?method=geo.gettoptracks&country=${d.properties.BRK_NAME}&api_key=${aKey}&format=json&limit=10`;
+        // let aKey = process.env.REACT_APP_LASTFM_API_KEY;
+        let url = `${process.env.REACT_APP_API_URL}/trend?country=${d.properties.BRK_NAME}`;
 
-        // fetch 10 most popular songs for the country.
-        fetch(url)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-                data.message
-                    ? setSongsData(null) // message indicates an error
-                    : setSongsData(
-                          // Sort and save the data in the songsData state
-                          data.tracks.track.sort((a, b) => b.listeners - a.listeners)
-                      );
-            });
-        songsData.map((song) => console.log("http://coverartarchive.org/release/" + song["mbid"]));
+        let data = await fetch(url).then((res) => res.json());
+        let song_data = data.map((song) => ({
+            name: song.track_name,
+            image: song.images ? song.images[1].url : "",
+            listeners: song.listeners,
+        }));
+        setSongsData(song_data);
+        console.log(song_data);
+        // fetch 10 most popular songs for the country from backend
+        // fetch(url)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //         data.message
+        //             ? setSongsData(null) // message indicates an error
+        //             : setSongsData(
+        //                   // Sort and save the data in the songsData state
+        //                   data.tracks.track.sort((a, b) => b.listeners - a.listeners)
+        //               );
+        //     });
+        // songsData.map((song) => console.log("http://coverartarchive.org/release/" + song["mbid"]));
 
         // console.log(songsData);
     }

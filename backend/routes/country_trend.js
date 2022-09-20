@@ -43,7 +43,7 @@ async function country_trends(country, limit = 10) {
         .then((response) => response.json())
         .then((data) => data.tracks.track)
         .catch((err) => console.log(err));
-
+    console.log(trend_data);
     // search tracks based on track name and artist name
     // do this for every track of the list (total # limit)
     spotify_data = Promise.all(
@@ -54,12 +54,14 @@ async function country_trends(country, limit = 10) {
                     console.log("Something went wrong!", err);
                 }
             );
+
             if (data) {
                 return {
                     id: data["id"] ?? undefined,
                     track_name: data["name"] ?? undefined,
                     artist_name: data["artists"][0]["name"] ?? undefined,
                     album_name: data["album"]["name"] ?? undefined,
+                    listeners: td["listeners"] ?? undefined,
                     url: data["external_urls"] ?? undefined,
                     popularity: data["popularity"] ?? undefined,
                     images: data["album"]["images"] ?? undefined,
@@ -67,6 +69,7 @@ async function country_trends(country, limit = 10) {
                     uri: data["uri"] ?? undefined,
                 };
             } else {
+                // TODO: if you couldn't find it, try with the track name only
                 return {};
             }
         })

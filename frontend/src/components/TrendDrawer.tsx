@@ -11,8 +11,8 @@ import Drawer from "@mui/material/Drawer";
 type DrawerProps = {
     title: string;
     songsData: [{
-        image: {"#text":string}[];
         name: string;
+        image: string;
         listeners: string;
     }];
     open: boolean;
@@ -61,7 +61,7 @@ function TrendDrawer(props: DrawerProps) {
                           <ListItemAvatar>
                             <Avatar
                               alt={`Avatar n°${song.name }`}
-                              src={`${song.image[1]["#text"]}`}
+                              src={`${song.image}`}
                             />
                           </ListItemAvatar>
                           <ListItemText
