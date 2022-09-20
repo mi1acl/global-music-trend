@@ -18,17 +18,6 @@ const spotifyApi = new SpotifyWebApi({
     clientSecret: process.env.SPOTIFY_CLIENT_SECRET, // Your secret
 });
 
-// Get an access token and 'save' it using a setter
-spotifyApi.clientCredentialsGrant().then(
-    function (data) {
-        console.log("The access token is " + data.body["access_token"]);
-        spotifyApi.setAccessToken(data.body["access_token"]);
-    },
-    function (err) {
-        console.log("Something went wrong!", err);
-    }
-);
-
 // function get_token(client_id, client_secret) {
 //     /**
 //      * Returns a promise for a bearer token
@@ -89,10 +78,16 @@ async function new_releases(limit = 5, offset = 0, country) {
     return new_releases;
 }
 async function run(req, res) {
-    // let token = await get_token(client_id, client_secret);
-    // let access_token = token.access_token;
     // Get an access token and 'save' it using a setter
-
+    spotifyApi.clientCredentialsGrant().then(
+        function (data) {
+            console.log("The access token is " + data.body["access_token"]);
+            spotifyApi.setAccessToken(data.body["access_token"]);
+        },
+        function (err) {
+            console.log("Something went wrong!", err);
+        }
+    );
     const token = spotifyApi.getAccessToken();
     console.log("token:\n", token);
 
