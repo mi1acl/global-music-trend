@@ -28,13 +28,12 @@ var requestOptions = {
     redirect: "follow",
 };
 
-async function run() {
+async function get_token(params) {
     // your application requests authorization
-    let token;
-    fetch("https://accounts.spotify.com/api/token", requestOptions)
-        .then((res) => res.json())
-        .then((res) => (token = res));
-
+    return fetch("https://accounts.spotify.com/api/token", requestOptions).then((res) =>
+        res.json()
+    );
+    // return token;
     // let res = await request.post(authOptions, function (error, response, body) {
     //     // console.log(body);
     //     if (!error && response.statusCode === 200) {
@@ -53,6 +52,10 @@ async function run() {
     //     }
     // });
     // console.log(res);
+}
+async function run() {
+    let token = await get_token();
+    console.log("here", token);
 }
 
 router.get("", run);
