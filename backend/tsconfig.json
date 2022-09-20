@@ -16,7 +16,7 @@
         // my configs
         "noEmit": true,
         "allowSyntheticDefaultImports": true,
-        // "allowJs": true,
+        "allowJs": true,
         // "checkJs": true,
     },
     "compileOnSave": false,
