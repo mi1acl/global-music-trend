@@ -14,88 +14,21 @@ require("dotenv").config();
 const SpotifyWebApi = require("spotify-web-api-node");
 
 const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID, // Your client id
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET, // Your secret
+    clientId: process.env.SPOTIFY_CLIENT_ID,
+    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
+    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
 });
 
-// function get_token(client_id, client_secret) {
-//     /**
-//      * Returns a promise for a bearer token
-//      */
-//     var urlencoded = new URLSearchParams();
-//     urlencoded.append("grant_type", "client_credentials");
-//     let requestOptions = {
-//         method: "POST",
-//         headers: {
-//             Authorization:
-//                 "Basic " + Buffer.from(client_id + ":" + client_secret).toString("base64"),
-//             "Content-Type": "application/x-www-form-urlencoded",
-//         },
-//         body: urlencoded,
-//         redirect: "follow",
-//     };
-
-//     return fetch("https://accounts.spotify.com/api/token", requestOptions).then((res) =>
-//         res.json()
-//     );
-// }
-// async function get_user(token, username) {
-//     let url = `https://api.spotify.com/v1/users/${username}`;
-//     console.log(`Bearer ${token}`);
-//     var options = {
-//         method: "GET",
-//         headers: {
-//             Authorization: `Bearer ${token}`,
-//         },
-//         "Content-Type": "application/json",
-//     };
-//     return fetch(url, options).then((res) => res.json());
-//     // let res = await request.post(authOptions, function (error, response, body) {
-//     //     // console.log(body);
-//     //     if (!error && response.statusCode === 200) {
-//     //         // use the access token to access the Spotify Web API
-//     //         token = body.access_token;
-//     //         // request.get(options, function (_error, _response, body) {
-//     //         //     console.log(body);
-//     //         // });
-//     //     }
-//     // });
-//     // console.log(res);
-// }
-async function new_releases(limit = 5, offset = 0, country) {
-    let new_releases = await spotifyApi
-        .getNewReleases({ limit: 5, offset: 0, country: country })
-        .then(
-            function (data) {
-                console.log(data.body);
-                return data.body;
-            },
-            function (err) {
-                console.log("Something went wrong!", err);
-            }
-        );
-    console.log(new_releases);
-    return new_releases;
-}
-async function run(req, res) {
-    // Get an access token and 'save' it using a setter
-    spotifyApi.clientCredentialsGrant().then(
-        function (data) {
-            console.log("The access token is " + data.body["access_token"]);
-            spotifyApi.setAccessToken(data.body["access_token"]);
-        },
-        function (err) {
-            console.log("Something went wrong!", err);
-        }
-    );
-    const token = spotifyApi.getAccessToken();
-    console.log("token:\n", token);
-
-    // console.log(await get_user(access_token, "jmperezperez"));
-    res.send(new_releases("USA"));
+let scopes = ["streaming"],
+    // TODO: change the state to a random string from client/backend
+    state = "development-state";
+function spotify_url(req, res) {
+    var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
+    console.log(authorizeURL);
+    res.status(200).send(authorizeURL);
 }
 
-router.get("", (req, res) => run(req, res));
+router.get("/url", (req, res) => spotify_url(req, res));
 
 module.exports = {
     path: "/auth", // The main entrance to this route aka /

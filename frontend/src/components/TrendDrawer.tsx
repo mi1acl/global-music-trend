@@ -8,6 +8,8 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Drawer from "@mui/material/Drawer";
+import SpotifyPlayer from 'react-spotify-web-playback';
+
 type DrawerProps = {
     title: string;
     songsData: [{
@@ -73,6 +75,11 @@ function TrendDrawer(props: DrawerProps) {
                     );
                   })}
                 </List>
+
+                <SpotifyPlayer
+                token="BQCHy2muPvGJcg8fzkowoSidIEKlZlGEpOpjuNFvdO3sikTaP2SkgEJ8jADr6QQHRqUzQN3VLyv94QmvJz5UbIWcwkFzezNpenXbFfTk1IHxamPxCa0"
+                uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
+                />
               </>
             ) : (
               <Typography variant="h5">
