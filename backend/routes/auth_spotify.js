@@ -10,14 +10,7 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
-// const fetch = require("node-fetch");
-const SpotifyWebApi = require("spotify-web-api-node");
-
-const spotifyApi = new SpotifyWebApi({
-    clientId: process.env.SPOTIFY_CLIENT_ID,
-    clientSecret: process.env.SPOTIFY_CLIENT_SECRET,
-    redirectUri: process.env.SPOTIFY_REDIRECT_URI,
-});
+const { spotifyApi } = require("../utils/spotifyApiObj");
 
 let scopes = ["streaming"],
     // TODO: change the state to a random string from client/backend

@@ -58,21 +58,6 @@ function MusicGlobe() {
         }));
         setSongsData(song_data);
         console.log(song_data);
-        // fetch 10 most popular songs for the country from backend
-        // fetch(url)
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         console.log(data);
-        //         data.message
-        //             ? setSongsData(null) // message indicates an error
-        //             : setSongsData(
-        //                   // Sort and save the data in the songsData state
-        //                   data.tracks.track.sort((a, b) => b.listeners - a.listeners)
-        //               );
-        //     });
-        // songsData.map((song) => console.log("http://coverartarchive.org/release/" + song["mbid"]));
-
-        // console.log(songsData);
     }
 
     // ===================

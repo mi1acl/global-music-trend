@@ -11,6 +11,23 @@ const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
 require("dotenv").config();
+const { spotifyApi } = require("../utils/spotifyApiObj");
+
+async function spotify_login() {
+    // Get an access token and 'save' it using a setter
+    spotifyApi.clientCredentialsGrant().then(
+        function (data) {
+            console.log("The access token is " + data.body["access_token"]);
+            spotifyApi.setAccessToken(data.body["access_token"]);
+        },
+        function (err) {
+            console.log("Something went wrong!", err);
+        }
+    );
+    const token = spotifyApi.getAccessToken();
+    console.log("token:\n", token);
+}
+spotify_login();
 
 async function country_trends(country, limit = 10) {
     let aKey = process.env.LASTFM_API_KEY;
