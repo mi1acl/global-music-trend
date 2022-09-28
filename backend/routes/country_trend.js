@@ -11,7 +11,7 @@ const express = require("express");
 const router = express.Router();
 const fetch = require("node-fetch");
 require("dotenv").config();
-const { spotifyApi } = require("../utils/spotifyApiObj");
+const { spotifyApi } = require("../utils/commons");
 
 async function spotify_login() {
     // Get an access token and 'save' it using a setter
@@ -24,8 +24,6 @@ async function spotify_login() {
             console.log("Something went wrong!", err);
         }
     );
-    const token = spotifyApi.getAccessToken();
-    console.log("token:\n", token);
 }
 spotify_login();
 
@@ -38,7 +36,6 @@ async function country_trends(country, limit = 10) {
         .then((response) => response.json())
         .then((data) => data.tracks.track)
         .catch((err) => console.log(err));
-    console.log(trend_data);
     // search tracks based on track name and artist name
     // do this for every track of the list (total # limit)
     spotify_data = Promise.all(
@@ -69,7 +66,7 @@ async function country_trends(country, limit = 10) {
             }
         })
     );
-    console.log(spotify_data);
+    // console.log(spotify_data);
     return spotify_data;
 }
 async function run(req, res) {

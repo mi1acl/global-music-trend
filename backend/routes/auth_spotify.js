@@ -10,14 +10,21 @@
 const express = require("express");
 const router = express.Router();
 require("dotenv").config();
-const { spotifyApi } = require("../utils/spotifyApiObj");
+let { spotifyApi, updateState } = require("../utils/commons");
+
+function getRandomString() {
+    let random_str = Buffer.from(Math.random().toString()).toString("base64").substring(10, 15);
+    let timestamp_str = Date.now().toString().substring(7);
+    return random_str + timestamp_str;
+}
 
 let scopes = ["streaming"],
-    // TODO: change the state to a random string from client/backend
-    state = "development-state";
+    // Store the state so it can be checked by callback route
+    state = getRandomString();
+updateState(state);
 function spotify_url(req, res) {
     var authorizeURL = spotifyApi.createAuthorizeURL(scopes, state);
-    console.log(authorizeURL);
+    console.log("auth_spotify.js", authorizeURL);
     res.status(200).send(authorizeURL);
 }
 

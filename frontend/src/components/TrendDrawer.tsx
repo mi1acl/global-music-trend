@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
 import List from "@mui/material/List";
@@ -8,10 +8,10 @@ import ListItemText from "@mui/material/ListItemText";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
 import Avatar from "@mui/material/Avatar";
 import Drawer from "@mui/material/Drawer";
-// import SpotifyPlayer from 'react-spotify-web-playback';
-import Dialog from "@mui/material/Dialog";
-import DialogTitle from "@mui/material/DialogTitle";
-import NewWindow from "react-new-window";
+import SpotifyPlayer from "react-spotify-web-playback";
+// import Dialog from "@mui/material/Dialog";
+// import DialogTitle from "@mui/material/DialogTitle";
+// import NewWindow from "react-new-window";
 
 type DrawerProps = {
     title: string;
@@ -26,30 +26,47 @@ type DrawerProps = {
     toggleDrawer: () => void;
     setDrawer: (newState: boolean) => void;
 };
-const openInNewTab = (url: string | URL | undefined) => {
+
+const openInPopUp = (url: string | URL | undefined) => {
     window.open(url, "_blank", "popup,noopener,noreferrer");
 };
 
 function TrendDrawer(props: DrawerProps) {
-    const [authed] = useState(false);
+    const [authed, setAuthed] = useState(false);
     const [spotifyURL, setSpotifyURL] = useState("");
-    const [showDialog, setShowDialog] = useState(false);
+    const [token, setToken] = useState("");
 
     function handleButtonClick(): void {
+        fetch(process.env.REACT_APP_API_URL + "/callback/authed")
+            .then((res) => res.json())
+            .then((body) => (body.authed ? setAuthed(true) : setAuthed(false)));
         if (authed) {
-            console.log("Authenticated!");
+            console.log("authed");
+
+            fetch(process.env.REACT_APP_API_URL + "/callback/test")
+                .then((res) => res.json())
+                .then((json) => {
+                    if (json.token) {
+                        setToken(json.token);
+                    }
+                });
         } else {
             fetch(process.env.REACT_APP_API_URL + "/auth/url")
-                .then((res) => res.text())
-                .then((url) => setSpotifyURL(url));
+                .then((res) => {
+                    return res.text();
+                })
+                .then((url) => {
+                    setSpotifyURL(url);
+                })
+                .catch((err) => console.log("something went wrong", err));
         }
-        console.log(spotifyURL);
-
-        setShowDialog(true);
-
-        openInNewTab(spotifyURL);
     }
 
+    useEffect(() => {
+        if (spotifyURL) {
+            openInPopUp(spotifyURL);
+        }
+    }, [spotifyURL]);
     return (
         <React.Fragment>
             <Drawer
@@ -103,11 +120,14 @@ function TrendDrawer(props: DrawerProps) {
                                 );
                             })}
                         </List>
-
-                        {/* <SpotifyPlayer
-                token="BQCHy2muPvGJcg8fzkowoSidIEKlZlGEpOpjuNFvdO3sikTaP2SkgEJ8jADr6QQHRqUzQN3VLyv94QmvJz5UbIWcwkFzezNpenXbFfTk1IHxamPxCa0"
-                uris={['spotify:artist:6HQYnRM4OzToCYPpVBInuU']}
-                /> */}
+                        {token ? (
+                            <SpotifyPlayer
+                                token={token}
+                                uris={["spotify:artist:6HQYnRM4OzToCYPpVBInuU"]}
+                            />
+                        ) : (
+                            ""
+                        )}
                     </>
                 ) : (
                     <Typography variant="h5">
